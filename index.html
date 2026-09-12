@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Keynetic — Type Faster</title>
+    <meta
+        name="description"
+        content="A simple and focused typing experience."
+    >
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <header class="navbar">
+        <a href="#" class="logo">Keynetic</a>
+
+        <nav class="nav-links">
+            <a href="#typing">Typing</a>
+            <a href="#about">About</a>
+        </nav>
+
+        <button
+            class="theme-toggle"
+            id="theme-toggle"
+            aria-label="Toggle theme"
+        >
+            ☼
+        </button>
+    </header>
+
+
+    <main>
+
+        <!-- Intro Screen -->
+        <section class="intro-screen" id="intro">
+
+            <div class="intro-content">
+
+                <p class="intro-label">
+                    TYPING, SIMPLIFIED.
+                </p>
+
+                <h1>
+                    Type without thinking.
+                </h1>
+
+                <p class="intro-description">
+                    Focus on the words. Let your fingers do the rest.
+                </p>
+
+                <button
+                    class="enter-btn"
+                    id="enter-btn"
+                >
+                    ENTER
+                </button>
+
+                <p class="enter-hint">
+                    or press Enter
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- Typing Interface -->
+        <section
+            class="typing-screen"
+            id="typing"
+            hidden
+        >
+
+            <!-- Test Settings -->
+            <aside class="settings" id="settings">
+
+                <div class="settings-header">
+                    <span>Settings</span>
+
+                    <button
+                        class="settings-close"
+                        id="settings-close"
+                        aria-label="Hide settings"
+                    >
+                        ×
+                    </button>
+                </div>
+
+
+                <div class="setting-group">
+
+                    <span class="setting-label">
+                        Time
+                    </span>
+
+                    <div class="setting-options">
+
+                        <button class="setting-option active">
+                            15
+                        </button>
+
+                        <button class="setting-option">
+                            30
+                        </button>
+
+                        <button class="setting-option">
+                            60
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="setting-group">
+
+                    <span class="setting-label">
+                        Mode
+                    </span>
+
+                    <div class="setting-options">
+
+                        <button class="setting-option active">
+                            Words
+                        </button>
+
+                        <button class="setting-option">
+                            Quotes
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </aside>
+
+
+            <!-- Show Settings Button -->
+            <button
+                class="settings-open"
+                id="settings-open"
+                aria-label="Show settings"
+                hidden
+            >
+                ⚙
+            </button>
+
+
+            <!-- Typing Area -->
+            <div class="typing-area">
+
+                <div class="typing-info">
+
+                    <span id="timer">
+                        30
+                    </span>
+
+                    <span id="wpm">
+                        0 WPM
+                    </span>
+
+                    <span id="accuracy">
+                        100%
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="typing-text"
+                    id="typing-text"
+                >
+                    The quick brown fox jumps over the lazy dog.
+                </div>
+
+
+                <input
+                    type="text"
+                    id="typing-input"
+                    class="typing-input"
+                    autocomplete="off"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                    aria-label="Type the displayed text"
+                >
+
+
+                <button
+                    class="restart-btn"
+                    id="restart-btn"
+                >
+                    Restart
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+
+        <p>
+            © 2026 Keynetic
+        </p>
+
+        <div class="footer-links">
+            <a href="#about">About</a>
+            <a href="#">Privacy</a>
+        </div>
+
+    </footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
