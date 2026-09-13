@@ -143,6 +143,30 @@ body {
     letter-spacing: -2.5px;
 }
 
+.hero-content .hero-title {
+    white-space: nowrap;
+    font-size: clamp(1.45rem, 5vw, 3.5rem);
+    letter-spacing: -1.5px;
+}
+
+.hero-title::after {
+    content: "|";
+    display: inline-block;
+    margin-left: 0.12em;
+    color: var(--accent);
+    animation: caret-blink 0.8s step-end infinite;
+}
+
+.hero-title:not(.is-typed)::after {
+    opacity: 1;
+}
+
+@keyframes caret-blink {
+    50% {
+        opacity: 0;
+    }
+}
+
 .hero-description {
     max-width: 430px;
     margin: 0 auto 38px;
