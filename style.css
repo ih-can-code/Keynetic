@@ -11,6 +11,14 @@
     --font-body: "DM Sans", sans-serif;
     --font-heading: "Space Grotesk", sans-serif;
 }
+.hidden {
+    display: none;
+}
+
+/* Keep sections hidden even when their layout class sets display: flex. */
+[hidden] {
+    display: none !important;
+}
 
 
 /* =========================
@@ -102,6 +110,12 @@ body {
     justify-content: center;
 
     text-align: center;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.hero-screen.is-leaving {
+    opacity: 0;
+    transform: translateY(-12px);
 }
 
 .hero-content {
@@ -201,6 +215,14 @@ body {
 .typing-screen {
     min-height: calc(100vh - 130px);
     position: relative;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.typing-screen.is-visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .typing-area {
