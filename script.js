@@ -9,17 +9,31 @@ function animateHeroTitle() {
     if (!heroTitle) return;
 
     const title = heroTitle.dataset.text;
-    let characterIndex = 0;
+    const typingSpeed = 75;
+    let startTime;
+    let displayedCharacters = 0;
 
-    const typingAnimation = setInterval(() => {
-        heroTitle.textContent += title[characterIndex];
-        characterIndex += 1;
+    function typeNextCharacter(timestamp) {
+        startTime ??= timestamp;
 
-        if (characterIndex === title.length) {
-            clearInterval(typingAnimation);
+        const characterCount = Math.min(
+            Math.floor((timestamp - startTime) / typingSpeed),
+            title.length
+        );
+
+        if (characterCount > displayedCharacters) {
+            heroTitle.textContent = title.slice(0, characterCount);
+            displayedCharacters = characterCount;
+        }
+
+        if (displayedCharacters < title.length) {
+            requestAnimationFrame(typeNextCharacter);
+        } else {
             heroTitle.classList.add("is-typed");
         }
-    }, 85);
+    }
+
+    requestAnimationFrame(typeNextCharacter);
 }
 
 animateHeroTitle();

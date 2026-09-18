@@ -152,7 +152,6 @@ body {
 .hero-title::after {
     content: "|";
     display: inline-block;
-    margin-left: 0.12em;
     color: var(--accent);
     animation: caret-blink 0.8s step-end infinite;
 }
