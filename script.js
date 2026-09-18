@@ -6,6 +6,8 @@ const heroTitle = document.querySelector("#hero-title");
 let isTransitioning = false;
 
 function animateHeroTitle() {
+    if (!heroTitle) return;
+
     const title = heroTitle.dataset.text;
     let characterIndex = 0;
 
