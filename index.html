@@ -79,119 +79,38 @@
             hidden
         >
 
-            <!-- Test Settings -->
-            <aside class="settings" id="settings">
-
-                <div class="settings-header">
-                    <span>Settings</span>
-
-                    <button
-                        class="settings-close"
-                        id="settings-close"
-                        aria-label="Hide settings"
-                    >
-                        ×
-                    </button>
-                </div>
-
-
-                <div class="setting-group">
-
-                    <span class="setting-label">
-                        Time
-                    </span>
-
-                    <div class="setting-options">
-
-                        <button class="setting-option active">
-                            15
-                        </button>
-
-                        <button class="setting-option">
-                            30
-                        </button>
-
-                        <button class="setting-option">
-                            60
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <div class="setting-group">
-
-                    <span class="setting-label">
-                        Mode
-                    </span>
-
-                    <div class="setting-options">
-
-                        <button class="setting-option active">
-                            Words
-                        </button>
-
-                        <button class="setting-option">
-                            Quotes
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </aside>
-
-
-            <!-- Show Settings Button -->
-            <button
-                class="settings-open"
-                id="settings-open"
-                aria-label="Show settings"
-                hidden
-            >
-                ⚙
-            </button>
-
 
             <!-- Typing Area -->
-            <div class="typing-area">
+            <section class="typing-area">
 
-                <div class="typing-info">
+                <div class="quick-settings">
+                    
 
-                    <span id="timer">
-                        30
-                    </span>
 
-                    <span id="wpm">
-                        0 WPM
-                    </span>
-
-                    <span id="accuracy">
-                        100%
-                    </span>
 
                 </div>
 
 
-                <div
-                    class="typing-text"
-                    id="typing-text"
-                >
-                    The quick brown fox jumps over the lazy dog.
+                <div class="typing-stage">
+                    <div
+                        class="typing-text"
+                        id="typing-text"
+                    >
+                        Dream is not what you see in sleep, it is the thing which doesn't let you sleep.
+                
+                    </div>
+
+                    <input
+                        type="text"
+                        id="typing-input"
+                        class="typing-input"
+                        autocomplete="off"
+                        autocorrect="off"
+                        autocapitalize="off"
+                        spellcheck="false"
+                        aria-label="Type the displayed text"
+                    >
                 </div>
-
-
-                <input
-                    type="text"
-                    id="typing-input"
-                    class="typing-input"
-                    autocomplete="off"
-                    autocorrect="off"
-                    autocapitalize="off"
-                    spellcheck="false"
-                    aria-label="Type the displayed text"
-                >
 
 
                 <button
@@ -201,7 +120,7 @@
                     Restart
                 </button>
 
-            </div>
+            </section>
 
         </section>
 
