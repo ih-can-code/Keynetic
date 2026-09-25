@@ -15,7 +15,7 @@
 
 <body>
 
-  <!-- Navbar -->
+    <!-- Navbar -->
     <header class="navbar">
         <a href="#index.html" class="logo">Keynetic</a>
 
@@ -40,33 +40,60 @@
         <!-- Hero Screen -->
         <section class="hero-screen" id="hero">
 
-            <div class="hero-content">
+            <div class="hero-inner">
 
-                <p class="hero-label">
-                    TYPING, SIMPLIFIED.
-                </p>
+                <div class="hero-content">
 
-                <h1
-                    class="hero-title"
-                    id="hero-title"
-                    data-text="Type Without Thinking"
-                    aria-label="Type Without Thinking"
-                ></h1>
+                    <p class="hero-label">
+                        Typing, simplified
+                    </p>
 
-                <p class="hero-description">
-                    Focus on the words. Let your fingers do the rest.
-                </p>
+                    <h1>
+                        <span
+                            class="hero-title"
+                            id="hero-title"
+                            data-text="Type Without Thinking"
+                            aria-label="Type Without Thinking"
+                        ></span>
+                    </h1>
 
-                <button
-                    class="enter-btn"
-                    id="enter-btn"
-                >
-                    ENTER
-                </button>
+                    <p class="hero-description">
+                        Focus on the words. Let your fingers do the rest.
+                    </p>
 
-                <p class="enter-hint">
-                    or press Enter
-                </p>
+                    <button
+                        class="enter-btn"
+                        id="enter-btn"
+                    >
+                        ENTER
+                    </button>
+
+                    <p class="enter-hint">
+                        or press Enter
+                    </p>
+
+                    <span class="hero-cursor" aria-hidden="true">|</span>
+
+                </div>
+
+                <div class="hero-panel" aria-hidden="true">
+                    <p class="hero-panel-title">Last session</p>
+
+                    <div class="hero-panel-row">
+                        <span class="hero-panel-label">Speed</span>
+                        <span class="hero-panel-value">89 wpm</span>
+                    </div>
+
+                    <div class="hero-panel-row">
+                        <span class="hero-panel-label">Accuracy</span>
+                        <span class="hero-panel-value">98%</span>
+                    </div>
+
+                    <div class="hero-panel-row">
+                        <span class="hero-panel-label">Streak</span>
+                        <span class="hero-panel-value">6 days</span>
+                    </div>
+                </div>
 
             </div>
 
@@ -80,17 +107,9 @@
             hidden
         >
 
-
-            <!-- Typing Area -->
             <section class="typing-area">
 
-                <div class="quick-settings">
-
-
-
-
-                </div>
-
+                <div class="typing-info"></div>
 
                 <div class="typing-stage">
                     <div
@@ -98,7 +117,6 @@
                         id="typing-text"
                     >
                         Dream is not what you see in sleep, it is the thing which doesn't let you sleep.
-                
                     </div>
 
                     <input
@@ -112,7 +130,6 @@
                         aria-label="Type the displayed text"
                     >
                 </div>
-
 
                 <button
                     class="restart-btn"
