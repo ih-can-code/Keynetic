@@ -193,6 +193,16 @@ body {
     display: inline;
 }
 
+.hero-title::after {
+    content: "|";
+    margin-left: 0.08em;
+    color: var(--accent);
+    font-size: 0.9em;
+    line-height: 1;
+    vertical-align: 0.06em;
+    animation: caret-blink 0.8s step-end infinite;
+}
+
 /* Caret lives on its own element now — see .hero-cursor below */
 
 .hero-description {
@@ -268,15 +278,7 @@ body {
 
 /* Blinking cursor — closes out the hero content, last thing in the flow */
 .hero-cursor {
-    display: inline-block;
-    margin-top: 46px;
-
-    color: var(--accent);
-
-    font-family: var(--font-mono);
-    font-size: 1.1rem;
-
-    animation: caret-blink 0.8s step-end infinite;
+    display: none;
 }
 
 @keyframes caret-blink {
@@ -431,13 +433,18 @@ body {
     outline: none;
 
     background: transparent;
-    color: var(--text);
+
+    /* The text layer above is the single visual source of truth. Keeping this
+       capture input transparent prevents its one-line rendering from drifting
+       away from the wrapping reference text. */
+    color: transparent;
+    -webkit-text-fill-color: transparent;
 
     font-family: var(--font-mono);
     font-size: clamp(1.15rem, 2.6vw, 1.5rem);
     line-height: 1.8;
     letter-spacing: inherit;
-    caret-color: var(--accent);
+    caret-color: transparent;
 }
 
 .typing-input::placeholder {
