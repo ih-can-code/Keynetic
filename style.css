@@ -793,3 +793,520 @@ body {
         gap: 10px;
     }
 }
+
+
+/* =========================================================
+   TYPING OPTIONS — pure CSS (radio / checkbox / select + :has)
+========================================================= */
+
+/* A transform on an ancestor would trap the fixed side panel inside the
+   typing screen, so once visible we drop the transform entirely. */
+.typing-screen.is-visible {
+    transform: none;
+}
+
+/* The form is only a wrapper (it powers the Reset button) */
+.opts-form {
+    display: contents;
+}
+
+/* ---- Hidden state inputs (sit right before their label) ---- */
+.opt-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ---- State variables ---- */
+.typing-screen {
+    --type-spacing: 0px;
+    --type-font: var(--font-mono);
+    --time: 30s;
+    --mem-delay: 3s;
+}
+
+.typing-screen:has(#diff-hard:checked) { --type-spacing: 1px; }
+
+.typing-screen:has(#time-15:checked)  { --time: 15s; }
+.typing-screen:has(#time-60:checked)  { --time: 60s; }
+.typing-screen:has(#time-120:checked) { --time: 120s; }
+
+.typing-screen:has(#mem-2:checked) { --mem-delay: 2s; }
+.typing-screen:has(#mem-5:checked) { --mem-delay: 5s; }
+
+/* Quote mode defaults to a serif "book" feel; the Font option overrides it */
+.typing-screen:has(option[value="quote"]:checked) { --type-font: var(--font-display); }
+
+.typing-screen:has(#font-mono:checked)  { --type-font: var(--font-mono); }
+.typing-screen:has(#font-serif:checked) { --type-font: var(--font-display); }
+.typing-screen:has(#font-sans:checked)  { --type-font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+
+/* ---- Accent colour (applies to the whole page) ---- */
+body:has(#acc-mint:checked)   { --accent: #6fcf97; --accent-dim: #3f8a5f; }
+body:has(#acc-sky:checked)    { --accent: #6aa9e9; --accent-dim: #3f6a9c; }
+body:has(#acc-rose:checked)   { --accent: #e07a9b; --accent-dim: #94485f; }
+body:has(#acc-violet:checked) { --accent: #a78bfa; --accent-dim: #6a56a8; }
+
+/* ---- Main options bar ---- */
+.options-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 28px;
+    margin-bottom: 14px;
+}
+
+.opt-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: none;
+}
+
+.opt-group legend {
+    float: left;
+    margin-right: 10px;
+    padding: 0;
+    color: var(--subtext);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+/* Keycap-style options, matching the navbar */
+.opt {
+    padding: 6px 12px;
+    background: var(--surface);
+    color: var(--subtext);
+    border: 1px solid var(--border);
+    border-bottom: 3px solid var(--border);
+    border-radius: 5px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.15s ease, border-color 0.15s ease,
+        transform 0.1s ease;
+}
+
+.opt:hover {
+    color: var(--text);
+    border-color: var(--accent-dim);
+}
+
+/* Selected = pressed-in brass key (same for every option, no colour coding) */
+.opt-input:checked + .opt {
+    color: var(--bg);
+    background: var(--accent);
+    border-color: var(--accent);
+    border-bottom-width: 1px;
+    transform: translateY(2px);
+}
+
+/* Keyboard focus ring (the real inputs are hidden) */
+.opt-input:focus-visible + .opt,
+.opt-input:focus-visible + .swatch {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* ---- Mode dropdown ---- */
+.mode-select {
+    appearance: none;
+    -webkit-appearance: none;
+    padding: 6px 30px 6px 12px;
+    color: var(--text);
+    background-color: var(--surface);
+    background-image:
+        linear-gradient(45deg, transparent 50%, var(--subtext) 50%),
+        linear-gradient(135deg, var(--subtext) 50%, transparent 50%);
+    background-position: calc(100% - 17px) 55%, calc(100% - 12px) 55%;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+    border: 1px solid var(--border);
+    border-bottom: 3px solid var(--border);
+    border-radius: 5px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+
+.mode-select:hover,
+.mode-select:focus-visible {
+    border-color: var(--accent-dim);
+    outline: none;
+}
+
+.mode-select option {
+    color: var(--text);
+    background: var(--surface);
+}
+
+.more-btn {
+    padding: 6px 10px;
+    font-size: 0.9rem;
+    line-height: 1;
+}
+
+/* =========================
+   SIDE PANEL (opens from the right)
+========================= */
+
+.drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    background: rgba(8, 9, 12, 0.55);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+}
+
+.drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+
+    width: min(340px, 88vw);
+    padding: 22px 22px 26px;
+    overflow-y: auto;
+
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+    box-shadow: -24px 0 60px -20px rgba(0, 0, 0, 0.7);
+
+    transform: translateX(105%);
+    visibility: hidden;
+    transition: transform 0.3s ease, visibility 0s linear 0.3s;
+}
+
+.typing-screen:has(#opt-more:checked) .drawer-backdrop {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.typing-screen:has(#opt-more:checked) .drawer {
+    transform: translateX(0);
+    visibility: visible;
+    transition-delay: 0s;
+}
+
+.drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+}
+
+.drawer-header h2 {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.drawer-close {
+    padding: 4px 8px;
+    color: var(--subtext);
+    font-size: 1.05rem;
+    line-height: 1;
+    cursor: pointer;
+    user-select: none;
+}
+
+.drawer-close:hover {
+    color: var(--text);
+}
+
+.drawer-group {
+    margin-bottom: 20px;
+    border: none;
+    transition: opacity 0.2s ease;
+}
+
+.drawer-group legend {
+    margin-bottom: 10px;
+    padding: 0;
+    color: var(--subtext);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.drawer-opts {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.drawer-note {
+    margin-bottom: 20px;
+    color: var(--subtext);
+    font-size: 0.68rem;
+    line-height: 1.6;
+}
+
+.drawer-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+}
+
+.drawer-reset {
+    border: none;
+    background: none;
+    color: var(--subtext);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+
+.drawer-reset:hover {
+    color: var(--accent);
+}
+
+.drawer-done {
+    padding: 8px 18px;
+    color: var(--bg);
+    background: var(--accent);
+    border-radius: 5px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Colour swatches */
+.swatch {
+    width: 26px;
+    height: 26px;
+    border: 2px solid var(--border);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+}
+
+.swatch:hover { transform: scale(1.08); }
+
+.sw-brass  { background: #d3a24c; }
+.sw-mint   { background: #6fcf97; }
+.sw-sky    { background: #6aa9e9; }
+.sw-rose   { background: #e07a9b; }
+.sw-violet { background: #a78bfa; }
+
+.opt-input:checked + .swatch {
+    outline: 2px solid var(--text);
+    outline-offset: 2px;
+}
+
+/* Dim Words-only groups when the mode isn't Words */
+.typing-screen:has(option[value="quote"]:checked) .words-only,
+.typing-screen:has(option[value="code"]:checked)  .words-only {
+    opacity: 0.35;
+}
+
+/* ---- Info badges (text generated purely by CSS) ---- */
+.typing-info {
+    align-items: center;
+    gap: 10px;
+}
+
+.info-badge {
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--subtext);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.info-diff::before { content: "easy"; }
+.typing-screen:has(#diff-medium:checked) .info-diff::before { content: "medium"; }
+.typing-screen:has(#diff-hard:checked)   .info-diff::before { content: "hard"; }
+
+.info-mode::before { content: "words"; }
+.typing-screen:has(option[value="quote"]:checked) .info-mode::before { content: "quote"; }
+.typing-screen:has(option[value="code"]:checked)  .info-mode::before { content: "code"; }
+
+.info-time::before { content: "30s"; }
+.typing-screen:has(#time-15:checked)  .info-time::before { content: "15s"; }
+.typing-screen:has(#time-60:checked)  .info-time::before { content: "60s"; }
+.typing-screen:has(#time-120:checked) .info-time::before { content: "120s"; }
+
+.typing-screen:has(#opt-hidebadges:checked) .typing-info {
+    display: none;
+}
+
+/* ---- Passage switching: show exactly one of the 9 ---- */
+.passage { display: none; }
+
+.typing-screen:has(#diff-easy:checked):has(option[value="words"]:checked)   .p-easy-words,
+.typing-screen:has(#diff-medium:checked):has(option[value="words"]:checked) .p-medium-words,
+.typing-screen:has(#diff-hard:checked):has(option[value="words"]:checked)   .p-hard-words,
+.typing-screen:has(#diff-easy:checked):has(option[value="quote"]:checked)   .p-easy-quote,
+.typing-screen:has(#diff-medium:checked):has(option[value="quote"]:checked) .p-medium-quote,
+.typing-screen:has(#diff-hard:checked):has(option[value="quote"]:checked)   .p-hard-quote,
+.typing-screen:has(#diff-easy:checked):has(option[value="code"]:checked)    .p-easy-code,
+.typing-screen:has(#diff-medium:checked):has(option[value="code"]:checked)  .p-medium-code,
+.typing-screen:has(#diff-hard:checked):has(option[value="code"]:checked)    .p-hard-code {
+    display: block;
+}
+
+/* ---- Include: punctuation / numbers / capitals, and Length ---- */
+.pn,
+.nm,
+.ext {
+    display: none;
+}
+
+.typing-screen:has(#opt-punct:checked) .pn,
+.typing-screen:has(#opt-nums:checked)  .nm,
+.typing-screen:has(#len-long:checked)  .ext {
+    display: inline;
+}
+
+.typing-screen:has(#opt-caps:checked) [class*="-words"] {
+    text-transform: capitalize;
+}
+
+/* Quote author line */
+.author {
+    display: block;
+    margin-top: 14px;
+    color: var(--accent-dim);
+    font-family: var(--font-display);
+    font-size: 0.8em;
+    font-style: italic;
+    letter-spacing: 0;
+}
+
+/* ---- Font + tracking apply to text AND capture input ---- */
+.typing-text,
+.typing-input {
+    font-family: var(--type-font);
+    letter-spacing: var(--type-spacing);
+}
+
+/* Code mode: editor-like look */
+.typing-screen:has(option[value="code"]:checked) .typing-text {
+    font-weight: 500;
+    line-height: 1.6;
+}
+
+.typing-screen:has(option[value="code"]:checked) .typing-stage {
+    border-left: 3px solid var(--accent-dim);
+}
+
+/* Quote mode: slightly tighter lines */
+.typing-screen:has(option[value="quote"]:checked) .typing-text {
+    font-weight: 500;
+    line-height: 1.6;
+}
+
+.typing-stage {
+    overflow: hidden;
+}
+
+/* ---- Timer (CSS-only) ----
+   Runs while the typing box has focus. Clicking Restart or anywhere
+   outside the box removes focus and resets it. */
+.timer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--border);
+}
+
+.timer-fill {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: var(--accent);
+    transform-origin: left center;
+}
+
+.typing-stage:focus-within .timer-fill {
+    animation: timer-drain var(--time) linear forwards;
+}
+
+@keyframes timer-drain {
+    to { transform: scaleX(0); }
+}
+
+.typing-screen:has(#opt-hidetimer:checked) .timer {
+    visibility: hidden;
+}
+
+.time-up {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    color: var(--accent);
+    background: rgba(28, 30, 39, 0.96);
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    text-align: center;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.typing-stage:focus-within .time-up {
+    animation: time-up-show 0.3s ease var(--time) forwards;
+}
+
+@keyframes time-up-show {
+    to { opacity: 1; }
+}
+
+/* ---- Memory: text blurs after the chosen delay ---- */
+.typing-screen:has(#opt-memory:checked) .typing-stage:focus-within .typing-text {
+    animation: memory-hide 0.6s ease var(--mem-delay) forwards;
+}
+
+@keyframes memory-hide {
+    to {
+        filter: blur(9px);
+        opacity: 0.35;
+    }
+}
+
+/* ---- Focus: dim the chrome while typing, hover to bring it back ---- */
+.navbar,
+.footer,
+.options-bar {
+    transition: opacity 0.25s ease;
+}
+
+body:has(#opt-focus:checked):has(.typing-stage:focus-within) .navbar,
+body:has(#opt-focus:checked):has(.typing-stage:focus-within) .footer,
+body:has(#opt-focus:checked):has(.typing-stage:focus-within) .options-bar {
+    opacity: 0.12;
+}
+
+body:has(#opt-focus:checked):has(.typing-stage:focus-within) .navbar:hover,
+body:has(#opt-focus:checked):has(.typing-stage:focus-within) .footer:hover,
+body:has(#opt-focus:checked):has(.typing-stage:focus-within) .options-bar:hover {
+    opacity: 1;
+}
+
+/* ---- Mobile ---- */
+@media (max-width: 600px) {
+    .options-bar { gap: 12px 18px; }
+    .opt-group { flex-wrap: wrap; }
+    .opt-group legend { float: none; width: 100%; margin-bottom: 4px; }
+}

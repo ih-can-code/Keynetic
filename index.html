@@ -97,6 +97,7 @@
 
         </section>
 
+        <!-- About -->
         <section class="about-section" id="about" hidden>
             <div class="about-content">
                 <p class="about-eyebrow">A personal project</p>
@@ -140,22 +141,188 @@
 
 
         <!-- Typing Interface -->
-        <section
-            class="typing-screen"
-            id="typing"
-            hidden
-        >
+        <section class="typing-screen" id="typing" hidden>
 
             <section class="typing-area">
 
-                <div class="typing-info"></div>
+                <!-- All options live in this form so "Reset" works without JS.
+                     The typing input is deliberately OUTSIDE the form. -->
+                <form class="opts-form" autocomplete="off">
+
+                    <!-- Main options bar -->
+                    <div class="options-bar">
+
+                        <fieldset class="opt-group">
+                            <legend>Time</legend>
+                            <input type="radio" name="time" id="time-15" class="opt-input">
+                            <label for="time-15" class="opt">15s</label>
+                            <input type="radio" name="time" id="time-30" class="opt-input" checked>
+                            <label for="time-30" class="opt">30s</label>
+                            <input type="radio" name="time" id="time-60" class="opt-input">
+                            <label for="time-60" class="opt">60s</label>
+                            <input type="radio" name="time" id="time-120" class="opt-input">
+                            <label for="time-120" class="opt">120s</label>
+                        </fieldset>
+
+                        <fieldset class="opt-group">
+                            <legend>Difficulty</legend>
+                            <input type="radio" name="diff" id="diff-easy" class="opt-input" checked>
+                            <label for="diff-easy" class="opt">Easy</label>
+                            <input type="radio" name="diff" id="diff-medium" class="opt-input">
+                            <label for="diff-medium" class="opt">Medium</label>
+                            <input type="radio" name="diff" id="diff-hard" class="opt-input">
+                            <label for="diff-hard" class="opt">Hard</label>
+                        </fieldset>
+
+                        <fieldset class="opt-group">
+                            <legend>Mode</legend>
+                            <select id="mode-select" class="mode-select" aria-label="Typing mode">
+                                <option value="words" selected>Words</option>
+                                <option value="quote">Quote</option>
+                                <option value="code">Code</option>
+                            </select>
+                            <input type="checkbox" id="opt-more" class="opt-input">
+                            <label for="opt-more" class="opt more-btn" title="More options" aria-label="More options">⋯</label>
+                        </fieldset>
+
+                    </div>
+
+                    <!-- Click-away backdrop (closes the side panel) -->
+                    <label for="opt-more" class="drawer-backdrop" aria-hidden="true"></label>
+
+                    <!-- Side panel -->
+                    <aside class="drawer" role="dialog" aria-label="More options">
+
+                        <div class="drawer-header">
+                            <h2>More options</h2>
+                            <label for="opt-more" class="drawer-close" role="button" aria-label="Close options">✕</label>
+                        </div>
+
+                        <fieldset class="drawer-group words-only">
+                            <legend>Include</legend>
+                            <div class="drawer-opts">
+                                <input type="checkbox" id="opt-punct" class="opt-input">
+                                <label for="opt-punct" class="opt">Punctuation</label>
+                                <input type="checkbox" id="opt-nums" class="opt-input">
+                                <label for="opt-nums" class="opt">Numbers</label>
+                                <input type="checkbox" id="opt-caps" class="opt-input">
+                                <label for="opt-caps" class="opt">Capitals</label>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="drawer-group words-only">
+                            <legend>Length</legend>
+                            <div class="drawer-opts">
+                                <input type="radio" name="len" id="len-short" class="opt-input" checked>
+                                <label for="len-short" class="opt">Short</label>
+                                <input type="radio" name="len" id="len-long" class="opt-input">
+                                <label for="len-long" class="opt">Long</label>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="drawer-group">
+                            <legend>Challenge</legend>
+                            <div class="drawer-opts">
+                                <input type="checkbox" id="opt-memory" class="opt-input">
+                                <label for="opt-memory" class="opt" title="Text blurs after you start typing">Memory</label>
+                                <input type="checkbox" id="opt-focus" class="opt-input">
+                                <label for="opt-focus" class="opt" title="Dims everything except the text while you type">Focus</label>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="drawer-group">
+                            <legend>Memory delay</legend>
+                            <div class="drawer-opts">
+                                <input type="radio" name="mem" id="mem-2" class="opt-input">
+                                <label for="mem-2" class="opt">2s</label>
+                                <input type="radio" name="mem" id="mem-3" class="opt-input" checked>
+                                <label for="mem-3" class="opt">3s</label>
+                                <input type="radio" name="mem" id="mem-5" class="opt-input">
+                                <label for="mem-5" class="opt">5s</label>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="drawer-group">
+                            <legend>Font</legend>
+                            <div class="drawer-opts">
+                                <input type="radio" name="font" id="font-mono" class="opt-input" checked>
+                                <label for="font-mono" class="opt">Mono</label>
+                                <input type="radio" name="font" id="font-serif" class="opt-input">
+                                <label for="font-serif" class="opt">Serif</label>
+                                <input type="radio" name="font" id="font-sans" class="opt-input">
+                                <label for="font-sans" class="opt">Sans</label>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="drawer-group">
+                            <legend>Accent</legend>
+                            <div class="drawer-opts">
+                                <input type="radio" name="accent" id="acc-brass" class="opt-input" checked>
+                                <label for="acc-brass" class="swatch sw-brass" title="Brass"></label>
+                                <input type="radio" name="accent" id="acc-mint" class="opt-input">
+                                <label for="acc-mint" class="swatch sw-mint" title="Mint"></label>
+                                <input type="radio" name="accent" id="acc-sky" class="opt-input">
+                                <label for="acc-sky" class="swatch sw-sky" title="Sky"></label>
+                                <input type="radio" name="accent" id="acc-rose" class="opt-input">
+                                <label for="acc-rose" class="swatch sw-rose" title="Rose"></label>
+                                <input type="radio" name="accent" id="acc-violet" class="opt-input">
+                                <label for="acc-violet" class="swatch sw-violet" title="Violet"></label>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="drawer-group">
+                            <legend>Interface</legend>
+                            <div class="drawer-opts">
+                                <input type="checkbox" id="opt-hidetimer" class="opt-input">
+                                <label for="opt-hidetimer" class="opt">Hide timer bar</label>
+                                <input type="checkbox" id="opt-hidebadges" class="opt-input">
+                                <label for="opt-hidebadges" class="opt">Hide badges</label>
+                            </div>
+                        </fieldset>
+
+                        <p class="drawer-note">Include and Length apply to Words mode.</p>
+
+                        <div class="drawer-footer">
+                            <button type="reset" class="drawer-reset">Reset to defaults</button>
+                            <label for="opt-more" class="drawer-done" role="button">Done</label>
+                        </div>
+
+                    </aside>
+
+                </form>
+
+                <div class="typing-info">
+                    <span class="info-badge info-diff"></span>
+                    <span class="info-badge info-mode"></span>
+                    <span class="info-badge info-time"></span>
+                </div>
 
                 <div class="typing-stage">
-                    <div
-                        class="typing-text"
-                        id="typing-text"
-                    >
-                        ""
+
+                    <!-- CSS-only timer -->
+                    <div class="timer" aria-hidden="true"><span class="timer-fill"></span></div>
+                    <div class="time-up" aria-hidden="true">Time's up — press Restart</div>
+
+                    <div class="typing-text" id="typing-text">
+
+                        <!-- WORDS
+                             pn  = punctuation (shown when enabled)
+                             nm  = numbers (shown when enabled)
+                             ext = extra sentence (shown when Length = Long) -->
+                        <p class="passage p-easy-words">the sun is up<span class="pn">,</span> and we can run to the park<span class="nm"> at 7</span><span class="pn">.</span> then we play with the dog<span class="pn">!</span><span class="ext"> we all have fun until the sun goes down<span class="pn">,</span> and then we go home to rest<span class="pn">.</span></span></p>
+                        <p class="passage p-medium-words">keyboard rhythm builds when you stay relaxed<span class="pn">,</span> and keep your eyes on the next word instead of your hands<span class="nm"> in 30 days</span><span class="pn">.</span><span class="ext"> good habits grow slowly<span class="pn">,</span> so be patient with each small mistake<span class="pn">.</span></span></p>
+                        <p class="passage p-hard-words">synchronize asymmetric rhythm exhibits perpendicular acknowledgment<span class="pn">;</span> while occasionally jeopardizing questionnaire accuracy<span class="nm"> by 15%</span><span class="pn">.</span><span class="ext"> consequently<span class="pn">,</span> deliberate repetition cultivates extraordinary precision over unpredictable circumstances<span class="pn">.</span></span></p>
+
+                        <!-- QUOTES -->
+                        <p class="passage p-easy-quote">Less is more.<span class="author">— Ludwig Mies van der Rohe</span></p>
+                        <p class="passage p-medium-quote">It does not matter how slowly you go, as long as you do not stop.<span class="author">— Confucius</span></p>
+                        <p class="passage p-hard-quote">Whether you think you can, or you think you can't, you're right.<span class="author">— Attributed to Henry Ford</span></p>
+
+                        <!-- CODE -->
+                        <p class="passage p-easy-code">let x = 5;</p>
+                        <p class="passage p-medium-code">const sum = (a, b) =&gt; a + b;</p>
+                        <p class="passage p-hard-code">for (let i = 0; i &lt; 10; i++) { console.log(arr[i] ?? "n/a"); }</p>
+
                     </div>
 
                     <input
@@ -170,12 +337,7 @@
                     >
                 </div>
 
-                <button
-                    class="restart-btn"
-                    id="restart-btn"
-                >
-                    Restart
-                </button>
+                <button class="restart-btn" id="restart-btn">Restart</button>
 
             </section>
 
