@@ -17,10 +17,10 @@
 
     <!-- Navbar -->
     <header class="navbar">
-        <a href="#index.html" class="logo">Keynetic</a>
+        <a href="#hero" class="logo">Keynetic</a>
 
         <nav class="nav-links">
-            <a href="#index.html">Home</a>
+            <a href="#hero">Home</a>
             <a href="#typing">Typing</a>
             <a href="#about">About</a>
         </nav>
@@ -97,6 +97,47 @@
 
         </section>
 
+        <section class="about-section" id="about" hidden>
+            <div class="about-content">
+                <p class="about-eyebrow">A personal project</p>
+                <h1>About Keynetic</h1>
+                <p class="about-intro">Keynetic is a calm, focused place to practice typing, build speed, and track your progress one session at a time.</p>
+
+                <div class="about-grid">
+                    <article class="about-card">
+                        <span class="about-card-label">Why I made it</span>
+                        <h2>Practice without the noise</h2>
+                        <p>Simple prompts and a distraction-free screen help you focus on accuracy first and speed over time.</p>
+                    </article>
+
+                    <article class="about-card">
+                        <span class="about-card-label">First released</span>
+                        <h2>2026</h2>
+                        <p>Keynetic began as a personal project to make everyday typing practice feel clear and approachable.</p>
+                    </article>
+
+                    <article class="about-card about-support">
+                        <span class="about-card-label">Support this project</span>
+                        <h2>Enjoying Keynetic?</h2>
+                        <p>Your donation would support the continued development and upkeep of this independent project.</p>
+                        <p class="about-note">Donation details coming soon.</p>
+                    </article>
+
+                    <article class="about-card about-feedback">
+                        <span class="about-card-label">Feedback</span>
+                        <h2>Help me improve it</h2>
+                        <p>Share an idea, report a problem, or tell me what you think.</p>
+                        <form id="feedback-form" class="feedback-form">
+                            <label class="visually-hidden" for="feedback-message">Your feedback</label>
+                            <textarea id="feedback-message" name="feedback" rows="4" placeholder="Write your feedback here…" required></textarea>
+                            <button type="submit">Copy feedback</button>
+                            <span id="feedback-status" class="feedback-status" aria-live="polite"></span>
+                        </form>
+                    </article>
+                </div>
+            </div>
+        </section>
+
 
         <!-- Typing Interface -->
         <section
@@ -114,7 +155,7 @@
                         class="typing-text"
                         id="typing-text"
                     >
-                        Dream is not what you see in sleep, it is the thing which doesn't let you sleep.
+                        ""
                     </div>
 
                     <input
@@ -152,7 +193,6 @@
 
         <div class="footer-links">
             <a href="#about">About</a>
-            <a href="#">Privacy</a>
         </div>
 
     </footer>
