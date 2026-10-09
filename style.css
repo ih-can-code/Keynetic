@@ -1310,3 +1310,33 @@ body:has(#opt-focus:checked):has(.typing-stage:focus-within) .options-bar:hover 
     .opt-group { flex-wrap: wrap; }
     .opt-group legend { float: none; width: 100%; margin-bottom: 4px; }
 }
+/* Live typing feedback and session controls */
+.char-pending { color: var(--subtext); }
+.char-correct { color: var(--text); }
+.char-error { color: #f17676; background: rgba(241, 118, 118, .16); border-radius: 2px; }
+.typing-text { white-space: pre-wrap; overflow-wrap: anywhere; }
+.live-stat { margin-left: auto; color: var(--accent); font-size: .75rem; }
+.typing-input { z-index: 2; cursor: text; }
+.typing-stage:focus-within .typing-input { background: transparent; }
+.timer-fill { transition: transform .2s linear; }
+.result-card { margin-top: 22px; padding: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 7px; }
+.result-card h2 { margin: 8px 0 18px; font: 600 1.5rem var(--font-display); }
+.result-stats { display: flex; flex-wrap: wrap; gap: 32px; }
+.result-stats p { display: grid; gap: 4px; }
+.result-stats strong { color: var(--accent); font: 600 1.8rem var(--font-mono); }
+.result-stats span { color: var(--subtext); font-size: .7rem; text-transform: uppercase; }
+.wikipedia-form { margin: 0 0 18px; color: var(--subtext); font-size: .75rem; }
+.wikipedia-form label { display: block; margin-bottom: 8px; }
+.wiki-controls { display: flex; gap: 8px; }
+.wiki-controls input { flex: 1; min-width: 0; padding: 9px 12px; color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: 5px; font: .78rem var(--font-mono); }
+.wiki-controls button { padding: 9px 12px; color: var(--bg); background: var(--accent); border: 0; border-radius: 5px; font: 500 .75rem var(--font-mono); cursor: pointer; }
+.wiki-controls button:disabled { opacity: .6; cursor: wait; }
+#wiki-status { margin-top: 7px; min-height: 1em; line-height: 1.5; }
+#wiki-status a { color: var(--accent); }
+body.light-theme { --bg: #f3f0e9; --surface: #fffdf8; --surface-raised: #ebe6db; --text: #25252b; --subtext: #77736c; --border: #d8d1c4; }
+@media (max-width: 600px) { .live-stat { width: 100%; margin-left: 0; } .result-stats { gap: 18px; } .wiki-controls { flex-direction: column; } }
+/* The timer is driven by the typing session module. */
+.timer, .time-up { display: none !important; }
+.result-card { margin: auto; width: min(520px, calc(100% - 32px)); max-width: none; color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; }
+.result-card::backdrop { background: rgba(8, 10, 16, .72); backdrop-filter: blur(3px); }
+.result-card .restart-btn { margin-top: 18px; }

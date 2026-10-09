@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -180,6 +180,7 @@
                                 <option value="words" selected>Words</option>
                                 <option value="quote">Quote</option>
                                 <option value="code">Code</option>
+                                <option value="wikipedia">Wikipedia</option>
                             </select>
                             <input type="checkbox" id="opt-more" class="opt-input">
                             <label for="opt-more" class="opt more-btn" title="More options" aria-label="More options">⋯</label>
@@ -292,10 +293,17 @@
                 </form>
 
                 <div class="typing-info">
-                    <span class="info-badge info-diff"></span>
-                    <span class="info-badge info-mode"></span>
-                    <span class="info-badge info-time"></span>
+                    <span class="info-badge" id="info-diff">Easy</span>
+                    <span class="info-badge" id="info-mode">Words</span>
+                    <span class="info-badge" id="info-time">30s</span>
+                    <span class="live-stat" id="live-stat" aria-live="polite">0 WPM · 100% accuracy</span>
                 </div>
+
+                <form id="wikipedia-form" class="wikipedia-form" hidden>
+                    <label for="wiki-topic">Practice with a Wikipedia article</label>
+                    <div class="wiki-controls"><input id="wiki-topic" type="search" placeholder="Try: black holes, the Renaissance…" required><button type="submit" id="wiki-load">Load text</button></div>
+                    <p id="wiki-status" aria-live="polite">Searches English Wikipedia and uses its introductory text.</p>
+                </form>
 
                 <div class="typing-stage">
 
@@ -303,27 +311,7 @@
                     <div class="timer" aria-hidden="true"><span class="timer-fill"></span></div>
                     <div class="time-up" aria-hidden="true">Time's up — press Restart</div>
 
-                    <div class="typing-text" id="typing-text">
-
-                        <!-- WORDS
-                             pn  = punctuation (shown when enabled)
-                             nm  = numbers (shown when enabled)
-                             ext = extra sentence (shown when Length = Long) -->
-                        <p class="passage p-easy-words">the sun is up<span class="pn">,</span> and we can run to the park<span class="nm"> at 7</span><span class="pn">.</span> then we play with the dog<span class="pn">!</span><span class="ext"> we all have fun until the sun goes down<span class="pn">,</span> and then we go home to rest<span class="pn">.</span></span></p>
-                        <p class="passage p-medium-words">keyboard rhythm builds when you stay relaxed<span class="pn">,</span> and keep your eyes on the next word instead of your hands<span class="nm"> in 30 days</span><span class="pn">.</span><span class="ext"> good habits grow slowly<span class="pn">,</span> so be patient with each small mistake<span class="pn">.</span></span></p>
-                        <p class="passage p-hard-words">synchronize asymmetric rhythm exhibits perpendicular acknowledgment<span class="pn">;</span> while occasionally jeopardizing questionnaire accuracy<span class="nm"> by 15%</span><span class="pn">.</span><span class="ext"> consequently<span class="pn">,</span> deliberate repetition cultivates extraordinary precision over unpredictable circumstances<span class="pn">.</span></span></p>
-
-                        <!-- QUOTES -->
-                        <p class="passage p-easy-quote">Less is more.<span class="author">— Ludwig Mies van der Rohe</span></p>
-                        <p class="passage p-medium-quote">It does not matter how slowly you go, as long as you do not stop.<span class="author">— Confucius</span></p>
-                        <p class="passage p-hard-quote">Whether you think you can, or you think you can't, you're right.<span class="author">— Attributed to Henry Ford</span></p>
-
-                        <!-- CODE -->
-                        <p class="passage p-easy-code">let x = 5;</p>
-                        <p class="passage p-medium-code">const sum = (a, b) =&gt; a + b;</p>
-                        <p class="passage p-hard-code">for (let i = 0; i &lt; 10; i++) { console.log(arr[i] ?? "n/a"); }</p>
-
-                    </div>
+                    <div class="typing-text" id="typing-text" aria-label="Passage to type"></div>
 
                     <input
                         type="text"
@@ -337,7 +325,8 @@
                     >
                 </div>
 
-                <button class="restart-btn" id="restart-btn">Restart</button>
+                <dialog class="result-card" id="result-card" aria-labelledby="result-title"><p class="about-eyebrow">Session complete</p><h2 id="result-title">Your result</h2><div class="result-stats"><p><strong id="result-wpm">0</strong><span>WPM</span></p><p><strong id="result-accuracy">100%</strong><span>Accuracy</span></p><p><strong id="result-correct">0</strong><span>Correct chars</span></p></div><button type="button" id="next-test" class="restart-btn">Restart · Shift+Enter</button></dialog>
+                <button class="restart-btn" id="restart-btn" type="button">Restart test · Shift+Enter</button>
 
             </section>
 
@@ -360,7 +349,13 @@
     </footer>
 
 
-    <script src="script.js"></script>
+    <script type="module" src="js/app.js"></script>
 
 </body>
 </html>
+
+
+
+
+
+
