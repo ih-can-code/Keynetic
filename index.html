@@ -25,13 +25,21 @@
             <a href="#about">About</a>
         </nav>
 
-        <button
-            class="theme-toggle"
-            id="theme-toggle"
-            aria-label="Toggle theme"
-        >
-            Themes
-        </button>
+        <label class="visually-hidden" for="theme-select">Color theme</label>
+        <select class="theme-toggle" id="theme-select" aria-label="Color theme">
+            <optgroup label="Dark themes">
+                <option value="midnight">Midnight</option>
+                <option value="graphite">Graphite</option>
+                <option value="forest">Forest</option>
+                <option value="ocean">Ocean</option>
+                <option value="plum">Plum</option>
+            </optgroup>
+            <optgroup label="Light themes">
+                <option value="paper">Paper</option>
+                <option value="mist">Mist</option>
+                <option value="sand">Sand</option>
+            </optgroup>
+        </select>
     </header>
 
 
@@ -293,8 +301,6 @@
 
                     <!-- CSS-only timer -->
                     <div class="timer" aria-hidden="true"><span class="timer-fill"></span></div>
-                    <div class="time-up" aria-hidden="true">Time's up — press Restart</div>
-
                     <div class="typing-text" id="typing-text" aria-label="Passage to type"></div>
 
                     <input

@@ -16,6 +16,14 @@
     --font-mono: "JetBrains Mono", monospace;
 }
 
+body[data-theme="graphite"] { --bg:#181a1f; --surface:#22252c; --surface-raised:#2b2f38; --text:#e8eaf0; --subtext:#9298a5; --accent:#9aa7bd; --accent-dim:#59677d; --border:#353a45; }
+body[data-theme="forest"] { --bg:#121b18; --surface:#1b2822; --surface-raised:#24352d; --text:#e2eee5; --subtext:#8da497; --accent:#8fca9f; --accent-dim:#527b60; --border:#2e4136; }
+body[data-theme="ocean"] { --bg:#121a24; --surface:#1b2633; --surface-raised:#243344; --text:#e4edf5; --subtext:#8fa2b6; --accent:#77b9df; --accent-dim:#477994; --border:#2d4051; }
+body[data-theme="plum"] { --bg:#1c1722; --surface:#282130; --surface-raised:#352b40; --text:#eee5f2; --subtext:#a797ae; --accent:#c49add; --accent-dim:#795d8d; --border:#43364d; }
+body[data-theme="paper"] { --bg:#f4f2ed; --surface:#fffefa; --surface-raised:#e9e6df; --text:#292b30; --subtext:#73777e; --accent:#a46a28; --accent-dim:#80531f; --border:#d8d5ce; }
+body[data-theme="mist"] { --bg:#eff3f5; --surface:#fbfdff; --surface-raised:#e3eaef; --text:#25313a; --subtext:#687985; --accent:#317a9f; --accent-dim:#285c75; --border:#ced9df; }
+body[data-theme="sand"] { --bg:#f5efe4; --surface:#fffaf1; --surface-raised:#eae0d0; --text:#352d25; --subtext:#807363; --accent:#a45a38; --accent-dim:#79422b; --border:#ded1be; }
+
 .hidden {
     display: none;
 }
@@ -109,13 +117,13 @@ body {
 }
 
 .theme-toggle {
-    border: none;
-    background: none;
-
-    color: var(--subtext);
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    background: var(--surface);
+    color: var(--text);
     font-family: var(--font-mono);
     font-size: 0.82rem;
-
     cursor: pointer;
 }
 
@@ -843,11 +851,6 @@ body {
 .typing-screen:has(#font-serif:checked) { --type-font: var(--font-display); }
 .typing-screen:has(#font-sans:checked)  { --type-font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
 
-/* ---- Accent colour (applies to the whole page) ---- */
-body:has(#acc-mint:checked)   { --accent: #6fcf97; --accent-dim: #3f8a5f; }
-body:has(#acc-sky:checked)    { --accent: #6aa9e9; --accent-dim: #3f6a9c; }
-body:has(#acc-rose:checked)   { --accent: #e07a9b; --accent-dim: #94485f; }
-body:has(#acc-violet:checked) { --accent: #a78bfa; --accent-dim: #6a56a8; }
 
 /* ---- Main options bar ---- */
 .options-bar {
@@ -1096,12 +1099,6 @@ body:has(#acc-violet:checked) { --accent: #a78bfa; --accent-dim: #6a56a8; }
 
 .swatch:hover { transform: scale(1.08); }
 
-.sw-brass  { background: #d3a24c; }
-.sw-mint   { background: #6fcf97; }
-.sw-sky    { background: #6aa9e9; }
-.sw-rose   { background: #e07a9b; }
-.sw-violet { background: #a78bfa; }
-
 .opt-input:checked + .swatch {
     outline: 2px solid var(--text);
     outline-offset: 2px;
@@ -1129,18 +1126,6 @@ body:has(#acc-violet:checked) { --accent: #a78bfa; --accent-dim: #6a56a8; }
     text-transform: uppercase;
 }
 
-.info-diff::before { content: "easy"; }
-.typing-screen:has(#diff-medium:checked) .info-diff::before { content: "medium"; }
-.typing-screen:has(#diff-hard:checked)   .info-diff::before { content: "hard"; }
-
-.info-mode::before { content: "words"; }
-.typing-screen:has(option[value="quote"]:checked) .info-mode::before { content: "quote"; }
-.typing-screen:has(option[value="code"]:checked)  .info-mode::before { content: "code"; }
-
-.info-time::before { content: "30s"; }
-.typing-screen:has(#time-15:checked)  .info-time::before { content: "15s"; }
-.typing-screen:has(#time-60:checked)  .info-time::before { content: "60s"; }
-.typing-screen:has(#time-120:checked) .info-time::before { content: "120s"; }
 
 .typing-screen:has(#opt-hidebadges:checked) .typing-info {
     display: none;
@@ -1216,9 +1201,7 @@ body:has(#acc-violet:checked) { --accent: #a78bfa; --accent-dim: #6a56a8; }
     overflow: hidden;
 }
 
-/* ---- Timer (CSS-only) ----
-   Runs while the typing box has focus. Clicking Restart or anywhere
-   outside the box removes focus and resets it. */
+/* ---- Timer ---- */
 .timer {
     position: absolute;
     top: 0;
@@ -1236,41 +1219,8 @@ body:has(#acc-violet:checked) { --accent: #a78bfa; --accent-dim: #6a56a8; }
     transform-origin: left center;
 }
 
-.typing-stage:focus-within .timer-fill {
-    animation: timer-drain var(--time) linear forwards;
-}
-
-@keyframes timer-drain {
-    to { transform: scaleX(0); }
-}
-
 .typing-screen:has(#opt-hidetimer:checked) .timer {
     visibility: hidden;
-}
-
-.time-up {
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    color: var(--accent);
-    background: rgba(28, 30, 39, 0.96);
-    font-family: var(--font-display);
-    font-size: 1.4rem;
-    text-align: center;
-    opacity: 0;
-    pointer-events: none;
-}
-
-.typing-stage:focus-within .time-up {
-    animation: time-up-show 0.3s ease var(--time) forwards;
-}
-
-@keyframes time-up-show {
-    to { opacity: 1; }
 }
 
 /* ---- Memory: text blurs after the chosen delay ---- */
@@ -1314,6 +1264,7 @@ body:has(#opt-focus:checked):has(.typing-stage:focus-within) .options-bar:hover 
 .char-pending { color: var(--subtext); }
 .char-correct { color: var(--text); }
 .char-error { color: #f17676; background: rgba(241, 118, 118, .16); border-radius: 2px; }
+.char-corrected { color: #f2c94c; background: rgba(242, 201, 76, .14); border-radius: 2px; }
 .typing-text { white-space: pre-wrap; overflow-wrap: anywhere; }
 .live-stat { margin-left: auto; color: var(--accent); font-size: .75rem; }
 .typing-input { z-index: 2; cursor: text; }
@@ -1333,10 +1284,8 @@ body:has(#opt-focus:checked):has(.typing-stage:focus-within) .options-bar:hover 
 .wiki-controls button:disabled { opacity: .6; cursor: wait; }
 #wiki-status { margin-top: 7px; min-height: 1em; line-height: 1.5; }
 #wiki-status a { color: var(--accent); }
-body.light-theme { --bg: #f3f0e9; --surface: #fffdf8; --surface-raised: #ebe6db; --text: #25252b; --subtext: #77736c; --border: #d8d1c4; }
 @media (max-width: 600px) { .live-stat { width: 100%; margin-left: 0; } .result-stats { gap: 18px; } .wiki-controls { flex-direction: column; } }
 /* The timer is driven by the typing session module. */
-.timer, .time-up { display: none !important; }
 .result-card { margin: auto; width: min(520px, calc(100% - 32px)); max-width: none; color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; }
 .result-card::backdrop { background: rgba(8, 10, 16, .72); backdrop-filter: blur(3px); }
 .result-card .restart-btn { margin-top: 18px; }

@@ -31,7 +31,7 @@ const renderStats = () => {
   values[2].textContent = `${streak} day${streak === 1 ? "" : "s"}`;
 };
 const session = createTypingSession({
-  elements: { input: $("#typing-input"), text: $("#typing-text"), live: $("#live-stat"), restart: $("#restart-btn"), next: $("#next-test"), stage: $(".typing-stage") },
+  elements: { input: $("#typing-input"), text: $("#typing-text"), live: $("#live-stat"), timerFill: $(".timer-fill"), restart: $("#restart-btn"), next: $("#next-test"), stage: $(".typing-stage") },
   getSettings: () => {
     const current = settings();
     $("#info-diff").textContent = current.difficulty;
@@ -102,11 +102,18 @@ $("#feedback-form").addEventListener("submit", async event => {
   try { await navigator.clipboard.writeText($("#feedback-message").value.trim()); status.textContent = "Copied. You can now send it to the project creator."; }
   catch { status.textContent = "Clipboard unavailable. Please copy your feedback manually."; }
 });
-$("#theme-toggle").addEventListener("click", () => {
-  const light = document.body.classList.toggle("light-theme");
-  localStorage.setItem("keynetic-theme", light ? "light" : "dark");
-});
-if (localStorage.getItem("keynetic-theme") === "light") document.body.classList.add("light-theme");
+const themeSelect = $("#theme-select");
+const themes = new Set(["midnight", "graphite", "forest", "ocean", "plum", "paper", "mist", "sand"]);
+let savedTheme = "midnight";
+try { savedTheme = localStorage.getItem("keynetic-theme") || savedTheme; } catch { /* storage unavailable */ }
+if (!themes.has(savedTheme)) savedTheme = "midnight";
+const applyTheme = theme => {
+  document.body.dataset.theme = theme;
+  themeSelect.value = theme;
+  try { localStorage.setItem("keynetic-theme", theme); } catch { /* storage unavailable */ }
+};
+applyTheme(savedTheme);
+themeSelect.addEventListener("change", () => applyTheme(themeSelect.value));
 setupNavigation();
 
 renderStats();
