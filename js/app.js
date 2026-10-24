@@ -1,18 +1,41 @@
-﻿import { createPassage } from "./passage-generator.js";
+﻿import { createPassage, createQuotePassage } from "./passage-generator.js";
 import { createTypingSession } from "./typing.js";
 import { fetchRandomWikipediaIntro, fetchWikipediaIntro } from "./wikipedia.js";
+import { loadLocalQuotes } from "./quotes.js";
+import { loadLocalWords } from "./words.js";
 import { setupNavigation } from "./navigation.js";
 
 const $ = selector => document.querySelector(selector);
 const optionsForm = $(".opts-form");
 let wikiText = null;
+let quotePool = null;
+let quoteLoadPromise = null;
+let wordPools = null;
+let wordLoadPromise = null;
+const ensureQuotePool = () => {
+  if (quotePool) return Promise.resolve(quotePool);
+  if (!quoteLoadPromise) {
+    quoteLoadPromise = loadLocalQuotes().then(quotes => { quotePool = quotes; return quotes; });
+  }
+  return quoteLoadPromise;
+};
+const ensureWordPools = () => {
+  if (wordPools) return Promise.resolve(wordPools);
+  if (!wordLoadPromise) {
+    wordLoadPromise = loadLocalWords().then(pools => { wordPools = pools; return pools; });
+  }
+  return wordLoadPromise;
+};
 const settings = () => {
   const selected = name => optionsForm.querySelector(`[name="${name}"]:checked`);
   const checked = id => $(`#${id}`).checked;
   const mode = $("#mode-select").value;
   const difficulty = selected("diff")?.id.replace("diff-", "") ?? "easy";
   const duration = Number(selected("time")?.id.replace("time-", "") ?? 30);
-  const passage = createPassage({ difficulty, mode, options: { long: checked("len-long"), caps: checked("opt-caps"), punctuation: checked("opt-punct"), numbers: checked("opt-nums") }, wikiText: wikiText?.text });
+  const options = { long: checked("len-long"), caps: checked("opt-caps"), punctuation: checked("opt-punct"), numbers: checked("opt-nums") };
+  const quoteLength = selected("quote-length")?.id.replace("quote-", "") ?? "medium";
+  if (mode === "quote") return { difficulty, mode, duration, ...createQuotePassage(quotePool ?? {}, quoteLength) };
+  const passage = createPassage({ difficulty, mode, options, wikiText: wikiText?.text, wordPools: wordPools ?? {} });
   return { difficulty, mode, duration, passage };
 };
 const loadHistory = () => { try { return JSON.parse(localStorage.getItem("keynetic-results") || "[]"); } catch { return []; } };
@@ -31,7 +54,7 @@ const renderStats = () => {
   values[2].textContent = `${streak} day${streak === 1 ? "" : "s"}`;
 };
 const session = createTypingSession({
-  elements: { input: $("#typing-input"), text: $("#typing-text"), live: $("#live-stat"), timerFill: $(".timer-fill"), restart: $("#restart-btn"), next: $("#next-test"), stage: $(".typing-stage") },
+  elements: { input: $("#typing-input"), text: $("#typing-text"), live: $("#live-stat"), restart: $("#restart-btn"), next: $("#next-test"), stage: $(".typing-stage") },
   getSettings: () => {
     const current = settings();
     $("#info-diff").textContent = current.difficulty;
@@ -52,13 +75,28 @@ const session = createTypingSession({
     renderStats();
   }
 });
-const sync = () => {
+const sync = async () => {
   const isWiki = $("#mode-select").value === "wikipedia";
+  const isQuote = $("#mode-select").value === "quote";
+  const isWords = $("#mode-select").value === "words";
   $("#wikipedia-form").hidden = !isWiki;
+  $(".quote-only").hidden = !isQuote;
   $("#typing-text").hidden = isWiki && !wikiText;
   if ($("#typing").hidden) return;
   if ($("#result-card").open) $("#result-card").close();
   if (isWiki && !wikiText) { session.cancel(); $("#typing-input").disabled = true; $("#live-stat").textContent = "Load a Wikipedia topic to begin"; return; }
+  if (isQuote && !quotePool) {
+    session.cancel(); $("#typing-input").disabled = true; $("#live-stat").textContent = "Loading quotes…";
+    try { await ensureQuotePool(); }
+    catch (error) { $("#live-stat").textContent = error.message; return; }
+    if ($("#typing").hidden || $("#mode-select").value !== "quote") return;
+  }
+  if (isWords && !wordPools) {
+    session.cancel(); $("#typing-input").disabled = true; $("#live-stat").textContent = "Loading words…";
+    try { await ensureWordPools(); }
+    catch (error) { $("#live-stat").textContent = error.message; return; }
+    if ($("#typing").hidden || $("#mode-select").value !== "words") return;
+  }
   $("#typing-input").disabled = false; session.start();
 };
 document.addEventListener("keynetic:typing", sync);
@@ -72,7 +110,7 @@ document.addEventListener("keydown", e => {
   }
 });
 optionsForm.addEventListener("reset", () => setTimeout(sync, 0));
-const RESTARTS = new Set(["time", "diff", "len", "opt-punct", "opt-nums", "opt-caps"]);
+const RESTARTS = new Set(["time", "diff", "len", "quote-length", "opt-punct", "opt-nums", "opt-caps"]);
 optionsForm.addEventListener("change", ({ target }) => { if (RESTARTS.has(target.name) || RESTARTS.has(target.id)) sync(); });
 $("#mode-select").addEventListener("change", sync);
 const loadWikipedia = async random => {

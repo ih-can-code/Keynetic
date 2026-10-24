@@ -1,10 +1,20 @@
 ﻿export function createTypingSession({ elements, getSettings, onFinish }) {
   let target = "", duration = 30, startedAt = 0, timer = null, active = false;
   let mistakes = new Set();
-  const stop = () => { active = false; clearInterval(timer); };
+  let quoteBreaks = new Set();
+  let quoteAttributions = new Map();
+  const stop = () => {
+    active = false;
+    clearInterval(timer);
+    document.body.classList.remove("typing-active");
+  };
   const appendText = () => {
-    const more = getSettings().passage.replace(/\s*\n\s*/g, " ");
+    const settings = getSettings();
+    const more = settings.passage.replace(/\s*\n\s*/g, " ");
+    const start = target ? target.length + 1 : 0;
+    if (target && settings.mode === "quote") quoteBreaks.add(start);
     target += `${target ? " " : ""}${more}`;
+    if (settings.mode === "quote" && more) quoteAttributions.set(start + more.length - 1, settings.attribution || "Unknown");
   };
   const renderText = () => {
     const typed = elements.input.value;
@@ -14,6 +24,11 @@
         if (typed[index] !== char) { mistakes.add(index); span.className = "char-error"; }
         else span.className = mistakes.has(index) ? "char-corrected" : "char-correct";
       } else span.className = "char-pending";
+      if (quoteBreaks.has(index)) span.classList.add("quote-break");
+      if (quoteAttributions.has(index)) {
+        span.classList.add("quote-attribution");
+        span.dataset.attribution = quoteAttributions.get(index);
+      }
       if (index === typed.length) span.style.boxShadow = "inset 2px 0 0 var(--accent)";
       span.textContent = char;
       return span;
@@ -29,7 +44,6 @@
     const accuracy = typed.length ? Math.round(correct / typed.length * 100) : 100;
     const left = Math.max(0, Math.ceil(duration - spent));
     elements.live.textContent = `${left}s · ${wpm} WPM · ${accuracy}% accuracy`;
-    if (elements.timerFill) elements.timerFill.style.transform = `scaleX(${Math.max(0, 1 - spent / duration)})`;
     return { wpm, accuracy, correct, typed: typed.length, elapsed };
   };
   const finish = () => {
@@ -43,9 +57,11 @@
     if (result?.open) result.close();
     const settings = getSettings();
     target = settings.passage.replace(/\s*\n\s*/g, " ");
+    quoteBreaks = new Set();
+    quoteAttributions = new Map();
+    if (settings.mode === "quote" && target) quoteAttributions.set(target.length - 1, settings.attribution || "Unknown");
     duration = settings.duration; startedAt = 0;
     elements.input.disabled = false; elements.input.value = ""; mistakes = new Set();
-    if (elements.timerFill) elements.timerFill.style.transform = "scaleX(1)";
     elements.live.textContent = `${duration}s · 0 WPM · 100% accuracy`;
     renderText();
     elements.input.blur(); void elements.stage.offsetWidth; elements.input.focus();
@@ -56,6 +72,7 @@
     if (target.length - elements.input.value.length < 120) appendText();
     if (!active) {
       active = true; startedAt = Date.now();
+      document.body.classList.add("typing-active");
       timer = setInterval(() => (Date.now() - startedAt >= duration * 1000 ? finish() : update()), 200);
     }
     renderText(); update();

@@ -218,13 +218,23 @@
                             </div>
                         </fieldset>
 
+                        <fieldset class="drawer-group quote-only" hidden>
+                            <legend>Quote length</legend>
+                            <div class="drawer-opts">
+                                <input type="radio" name="quote-length" id="quote-short" class="opt-input">
+                                <label for="quote-short" class="opt">Short</label>
+                                <input type="radio" name="quote-length" id="quote-medium" class="opt-input" checked>
+                                <label for="quote-medium" class="opt">Medium</label>
+                                <input type="radio" name="quote-length" id="quote-large" class="opt-input">
+                                <label for="quote-large" class="opt">Large</label>
+                            </div>
+                        </fieldset>
+
                         <fieldset class="drawer-group">
                             <legend>Challenge</legend>
                             <div class="drawer-opts">
                                 <input type="checkbox" id="opt-memory" class="opt-input">
                                 <label for="opt-memory" class="opt" title="Text blurs after you start typing">Memory</label>
-                                <input type="checkbox" id="opt-focus" class="opt-input">
-                                <label for="opt-focus" class="opt" title="Dims everything except the text while you type">Focus</label>
                             </div>
                         </fieldset>
 
@@ -252,17 +262,7 @@
                             </div>
                         </fieldset>
 
-                        <fieldset class="drawer-group">
-                            <legend>Interface</legend>
-                            <div class="drawer-opts">
-                                <input type="checkbox" id="opt-hidetimer" class="opt-input">
-                                <label for="opt-hidetimer" class="opt">Hide timer bar</label>
-                                <input type="checkbox" id="opt-hidebadges" class="opt-input">
-                                <label for="opt-hidebadges" class="opt">Hide badges</label>
-                            </div>
-                        </fieldset>
-
-                        <p class="drawer-note">Include and Length apply to Words mode.</p>
+                        <p class="drawer-note">Include and Length apply to Words mode. Quote length applies in Quote mode.</p>
 
                         <div class="drawer-footer">
                             <button type="reset" class="drawer-reset">Reset to defaults</button>
@@ -287,9 +287,6 @@
                 </form>
 
                 <div class="typing-stage">
-
-                    <!-- CSS-only timer -->
-                    <div class="timer" aria-hidden="true"><span class="timer-fill"></span></div>
                     <div class="typing-text" id="typing-text" aria-label="Passage to type"></div>
 
                     <input
