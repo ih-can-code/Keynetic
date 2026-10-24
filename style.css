@@ -17,12 +17,7 @@
 }
 
 body[data-theme="graphite"] { --bg:#181a1f; --surface:#22252c; --surface-raised:#2b2f38; --text:#e8eaf0; --subtext:#9298a5; --accent:#9aa7bd; --accent-dim:#59677d; --border:#353a45; }
-body[data-theme="forest"] { --bg:#121b18; --surface:#1b2822; --surface-raised:#24352d; --text:#e2eee5; --subtext:#8da497; --accent:#8fca9f; --accent-dim:#527b60; --border:#2e4136; }
-body[data-theme="ocean"] { --bg:#121a24; --surface:#1b2633; --surface-raised:#243344; --text:#e4edf5; --subtext:#8fa2b6; --accent:#77b9df; --accent-dim:#477994; --border:#2d4051; }
-body[data-theme="plum"] { --bg:#1c1722; --surface:#282130; --surface-raised:#352b40; --text:#eee5f2; --subtext:#a797ae; --accent:#c49add; --accent-dim:#795d8d; --border:#43364d; }
-body[data-theme="paper"] { --bg:#f4f2ed; --surface:#fffefa; --surface-raised:#e9e6df; --text:#292b30; --subtext:#73777e; --accent:#a46a28; --accent-dim:#80531f; --border:#d8d5ce; }
 body[data-theme="mist"] { --bg:#eff3f5; --surface:#fbfdff; --surface-raised:#e3eaef; --text:#25313a; --subtext:#687985; --accent:#317a9f; --accent-dim:#285c75; --border:#ced9df; }
-body[data-theme="sand"] { --bg:#f5efe4; --surface:#fffaf1; --surface-raised:#eae0d0; --text:#352d25; --subtext:#807363; --accent:#a45a38; --accent-dim:#79422b; --border:#ded1be; }
 
 .hidden {
     display: none;
@@ -1106,7 +1101,7 @@ body {
 
 /* Dim Words-only groups when the mode isn't Words */
 .typing-screen:has(option[value="quote"]:checked) .words-only,
-.typing-screen:has(option[value="code"]:checked)  .words-only {
+.typing-screen:has(option[value="wikipedia"]:checked) .words-only {
     opacity: 0.35;
 }
 
@@ -1139,10 +1134,7 @@ body {
 .typing-screen:has(#diff-hard:checked):has(option[value="words"]:checked)   .p-hard-words,
 .typing-screen:has(#diff-easy:checked):has(option[value="quote"]:checked)   .p-easy-quote,
 .typing-screen:has(#diff-medium:checked):has(option[value="quote"]:checked) .p-medium-quote,
-.typing-screen:has(#diff-hard:checked):has(option[value="quote"]:checked)   .p-hard-quote,
-.typing-screen:has(#diff-easy:checked):has(option[value="code"]:checked)    .p-easy-code,
-.typing-screen:has(#diff-medium:checked):has(option[value="code"]:checked)  .p-medium-code,
-.typing-screen:has(#diff-hard:checked):has(option[value="code"]:checked)    .p-hard-code {
+.typing-screen:has(#diff-hard:checked):has(option[value="quote"]:checked)   .p-hard-quote {
     display: block;
 }
 
@@ -1179,16 +1171,6 @@ body {
 .typing-input {
     font-family: var(--type-font);
     letter-spacing: var(--type-spacing);
-}
-
-/* Code mode: editor-like look */
-.typing-screen:has(option[value="code"]:checked) .typing-text {
-    font-weight: 500;
-    line-height: 1.6;
-}
-
-.typing-screen:has(option[value="code"]:checked) .typing-stage {
-    border-left: 3px solid var(--accent-dim);
 }
 
 /* Quote mode: slightly tighter lines */

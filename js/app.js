@@ -1,6 +1,6 @@
 ﻿import { createPassage } from "./passage-generator.js";
 import { createTypingSession } from "./typing.js";
-import { fetchWikipediaIntro } from "./wikipedia.js";
+import { fetchRandomWikipediaIntro, fetchWikipediaIntro } from "./wikipedia.js";
 import { setupNavigation } from "./navigation.js";
 
 const $ = selector => document.querySelector(selector);
@@ -75,12 +75,15 @@ optionsForm.addEventListener("reset", () => setTimeout(sync, 0));
 const RESTARTS = new Set(["time", "diff", "len", "opt-punct", "opt-nums", "opt-caps"]);
 optionsForm.addEventListener("change", ({ target }) => { if (RESTARTS.has(target.name) || RESTARTS.has(target.id)) sync(); });
 $("#mode-select").addEventListener("change", sync);
-$("#wikipedia-form").addEventListener("submit", async event => {
-  event.preventDefault();
-  const status = $("#wiki-status"), button = $("#wiki-load");
-  button.disabled = true; status.textContent = "Searching Wikipedia…";
+const loadWikipedia = async random => {
+  const status = $("#wiki-status"), buttons = $("#wikipedia-form").querySelectorAll("button");
+  buttons.forEach(button => { button.disabled = true; });
+  status.textContent = random ? "Finding a random Wikipedia topic…" : "Searching Wikipedia…";
   try {
-    wikiText = await fetchWikipediaIntro($("#wiki-topic").value.trim());
+    wikiText = random
+      ? await fetchRandomWikipediaIntro()
+      : await fetchWikipediaIntro($("#wiki-topic").value.trim());
+    if (random) $("#wiki-topic").value = wikiText.title;
     session.cancel();
     $("#typing-text").hidden = false;
     $("#typing-input").disabled = false;
@@ -89,8 +92,13 @@ $("#wikipedia-form").addEventListener("submit", async event => {
     const link = Object.assign(document.createElement("a"), { href: wikiText.url, target: "_blank", rel: "noopener", textContent: `${wikiText.title} on Wikipedia` });
     status.replaceChildren("Loaded ", link, ".");
   } catch (error) { status.textContent = error.message; }
-  finally { button.disabled = false; }
+  finally { buttons.forEach(button => { button.disabled = false; }); }
+};
+$("#wikipedia-form").addEventListener("submit", event => {
+  event.preventDefault();
+  loadWikipedia(false);
 });
+$("#wiki-random").addEventListener("click", () => loadWikipedia(true));
 
 const title = $("#hero-title"), text = title.dataset.text;
 let i = 0;
@@ -103,10 +111,10 @@ $("#feedback-form").addEventListener("submit", async event => {
   catch { status.textContent = "Clipboard unavailable. Please copy your feedback manually."; }
 });
 const themeSelect = $("#theme-select");
-const themes = new Set(["midnight", "graphite", "forest", "ocean", "plum", "paper", "mist", "sand"]);
-let savedTheme = "midnight";
+const themes = new Set(["graphite", "mist"]);
+let savedTheme = "graphite";
 try { savedTheme = localStorage.getItem("keynetic-theme") || savedTheme; } catch { /* storage unavailable */ }
-if (!themes.has(savedTheme)) savedTheme = "midnight";
+if (!themes.has(savedTheme)) savedTheme = "graphite";
 const applyTheme = theme => {
   document.body.dataset.theme = theme;
   themeSelect.value = theme;

@@ -27,18 +27,8 @@
 
         <label class="visually-hidden" for="theme-select">Color theme</label>
         <select class="theme-toggle" id="theme-select" aria-label="Color theme">
-            <optgroup label="Dark themes">
-                <option value="midnight">Midnight</option>
-                <option value="graphite">Graphite</option>
-                <option value="forest">Forest</option>
-                <option value="ocean">Ocean</option>
-                <option value="plum">Plum</option>
-            </optgroup>
-            <optgroup label="Light themes">
-                <option value="paper">Paper</option>
-                <option value="mist">Mist</option>
-                <option value="sand">Sand</option>
-            </optgroup>
+            <option value="graphite">Graphite</option>
+            <option value="mist">Mist</option>
         </select>
     </header>
 
@@ -187,7 +177,6 @@
                             <select id="mode-select" class="mode-select" aria-label="Typing mode">
                                 <option value="words" selected>Words</option>
                                 <option value="quote">Quote</option>
-                                <option value="code">Code</option>
                                 <option value="wikipedia">Wikipedia</option>
                             </select>
                             <input type="checkbox" id="opt-more" class="opt-input">
@@ -293,7 +282,7 @@
 
                 <form id="wikipedia-form" class="wikipedia-form" hidden>
                     <label for="wiki-topic">Practice with a Wikipedia article</label>
-                    <div class="wiki-controls"><input id="wiki-topic" type="search" placeholder="Try: black holes, the Renaissance…" required><button type="submit" id="wiki-load">Load text</button></div>
+                    <div class="wiki-controls"><input id="wiki-topic" type="search" placeholder="Try: black holes, the Renaissance…" required><button type="submit" id="wiki-load">Load text</button><button type="button" id="wiki-random">Random topic</button></div>
                     <p id="wiki-status" aria-live="polite">Searches English Wikipedia and uses its introductory text.</p>
                 </form>
 
